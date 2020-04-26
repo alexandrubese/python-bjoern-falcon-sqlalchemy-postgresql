@@ -1,7 +1,5 @@
-import json
-
+import ujson
 import falcon
-
 from managers import response_manager
 from repositories import user_repository
 
@@ -17,7 +15,7 @@ class User(object):
             else:
                 response_manager.Manager(resp, result).not_ok()
         except Exception as error:
-            error = json.dumps({"status": False, "message": str(error), "data": None})
+            error = ujson.dumps({"status": False, "message": str(error), "data": None})
             response_manager.Manager(resp, error).not_ok()
 
     def on_get_item(self, req, resp, id):
@@ -30,14 +28,14 @@ class User(object):
             else:
                 response_manager.Manager(resp, result).not_ok()
         except Exception as error:
-            error = json.dumps({"status": False, "messagess": str(error), "data": None})
+            error = ujson.dumps({"status": False, "messagess": str(error), "data": None})
             response_manager.Manager(resp, error).not_ok()
 
     def on_get_mock_user(self, req, resp):
         try:
             #response_manager.Manager(resp, {"Hello": "World!"}).ok()
-            resp.body = json.dumps({"Hello": "World!"})
+            resp.body = ujson.dumps({"Hello": "World!"})
             resp.status = falcon.HTTP_200
         except Exception as error:
-            error = json.dumps({"status": False, "messagess": str(error), "data": None})
+            error = ujson.dumps({"status": False, "messagess": str(error), "data": None})
             response_manager.Manager(resp, error).not_ok()

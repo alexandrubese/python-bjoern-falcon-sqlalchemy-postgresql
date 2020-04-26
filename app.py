@@ -20,5 +20,5 @@ pydevd_pycharm.settrace('host.docker.internal',
 #    ContentEncodingMiddleware(),
 # ])
 
-api = falcon.API()
+api = falcon.App()
 init_routes.init_app_routes(api)
