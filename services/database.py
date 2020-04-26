@@ -15,7 +15,7 @@ def connect():
                                       host=config['postgresqlDB']['host'],
                                       port="5432",
                                       database=config['postgresqlDB']['db'])
-        print("You are connected!")
+        print("DB Connection Established!")
         return connection
     except (Exception, psycopg2.Error) as error:
         print("Error while connecting to PostgreSQL", error)

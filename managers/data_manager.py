@@ -1,7 +1,8 @@
+from openpyxl.compat.singleton import Singleton
 from services import database
 
 
-class DataManager(object):
+class DataManager(metaclass=Singleton):
     def __init__(self):
         self.conn = database.connect()
 
