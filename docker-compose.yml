@@ -1,0 +1,20 @@
+version: '2'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.:/app/.
+    tty: true
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: test_dev
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - '5432:5432'
