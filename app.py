@@ -1,5 +1,4 @@
 import falcon
-from services import database
 from routes import init_routes
 
 import sys
@@ -17,10 +16,9 @@ pydevd_pycharm.settrace('host.docker.internal',
 #    ContentEncodingMiddleware,
 # )
 
-conn = database.connect()
 # api = falcon.API(middleware=[
 #    ContentEncodingMiddleware(),
 # ])
 
 api = falcon.API()
-init_routes.init_app_routes(api, conn)
+init_routes.init_app_routes(api)

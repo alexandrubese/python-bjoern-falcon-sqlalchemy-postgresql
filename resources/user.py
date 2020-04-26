@@ -3,9 +3,10 @@ from managers import data_manager
 from managers import response_manager
 from repositories import user_repository
 
+
 class User(data_manager.DataManager):
-    def __init__(self, conn):
-        super().__init__(conn)
+    def __init__(self):
+        super().__init__()
 
     def on_get_collection(self, req, resp):
         try:

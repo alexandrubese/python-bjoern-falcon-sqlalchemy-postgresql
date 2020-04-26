@@ -1,6 +1,9 @@
+from services import database
+
+
 class DataManager(object):
-    def __init__(self, conn):
-        self.conn = conn
+    def __init__(self):
+        self.conn = database.connect()
 
     @staticmethod
     def set_columns(data, cursor):
