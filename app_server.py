@@ -1,14 +1,31 @@
 import bjoern
 import os
 import signal
-from app import api
+import falcon
+from routes import init_routes
+import sys
+import pydevd_pycharm
 
-host = '127.0.0.1'
+host = '0.0.0.0'
 port = 8000
-NUM_WORKERS = 6
+NUM_WORKERS = 1 #set this to 6+ for performance
 worker_pids = []
 
-bjoern.listen(api, host, port)
+api = falcon.API()
+init_routes.init_app_routes(api)
+
+sys.path.append("./debug/pydevd-pycharm.egg")
+pydevd_pycharm.settrace('host.docker.internal',
+                        port=8002,
+                        stdoutToServer=True,
+                        stderrToServer=True,
+                        suspend=False)
+
+bjoern.listen(api, host, port, reuse_port=True)
+print(f"Bjoern server listening on port {port}")
+bjoern.run()
+
+'''
 for _ in range(NUM_WORKERS):
     pid = os.fork()
     if pid > 0:
@@ -29,3 +46,4 @@ try:
 except KeyboardInterrupt:
     for pid in worker_pids:
         os.kill(pid, signal.SIGINT)
+'''

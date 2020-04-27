@@ -1,11 +1,11 @@
 import falcon
-import ujson
+import rapidjson as json
 
 
 class Manager(object):
     def __init__(self, resp: falcon.response, body) -> falcon.response:
         self.resp = resp
-        self.resp.body = ujson.dumps(body)
+        self.resp.body = json.dumps(body)
 
     def ok(self):
         self.resp.status = falcon.HTTP_200

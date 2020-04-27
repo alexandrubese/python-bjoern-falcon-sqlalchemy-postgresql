@@ -1,5 +1,3 @@
-'''
-
 import psycopg2
 import configparser
 import os
@@ -25,4 +23,3 @@ def connect():
     #    if connection:
     #        connection.close()
     #        print("PostgreSQL connection is closed")
-'''
