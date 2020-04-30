@@ -1,35 +1,38 @@
 import falcon
-import json
-from sqlalchemy.ext.declarative import DeclarativeMeta
+import rapidjson
+from sqlalchemy import inspect
 
 
-def new_alchemy_encoder():
-    _visited_objs = []
+def parse_list(items):
+    return [to_dict(item) for item in items]
 
-    class AlchemyEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj.__class__, DeclarativeMeta):
-                # don't re-visit self
-                if obj in _visited_objs:
-                    return None
-                _visited_objs.append(obj)
 
-                # an SQLAlchemy class
-                fields = {}
-                for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-                    fields[field] = obj.__getattribute__(field)
-                # a json-encodable dict
-                return fields
+def to_dict(obj, with_relationships=True):
+    d = {}
+    for column in obj.__table__.columns:
+        if with_relationships and len(column.foreign_keys) > 0:
+            # Skip foreign keys
+            continue
+        d[column.name] = getattr(obj, column.name)
 
-            return json.JSONEncoder.default(self, obj)
+    if with_relationships:
+        for relationship in inspect(type(obj)).relationships:
+            val = getattr(obj, relationship.key)
+            d[relationship.key] = to_dict(val) if val else None
+    return d
 
-    return AlchemyEncoder
+
+def create_response(body):
+    if not body:
+        return rapidjson.dumps(body)
+    else:
+        return rapidjson.dumps(parse_list(body) if isinstance(body, list) else to_dict(body))
 
 
 class Manager(object):
     def __init__(self, resp: falcon.response, body) -> falcon.response:
         self.resp = resp
-        self.resp.body = json.dumps(body, cls=new_alchemy_encoder(), check_circular=False)
+        self.resp.body = create_response(body)
 
     def ok(self):
         self.resp.status = falcon.HTTP_200
