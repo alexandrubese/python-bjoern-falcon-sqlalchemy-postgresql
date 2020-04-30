@@ -1,13 +1,13 @@
 import rapidjson as json
 import falcon
 from managers import response_manager
-from repositories import user_repository
+from repositories import user_repository1
 
 
 class User(object):
     def on_get_collection(self, req, resp):
         try:
-            user_repo = user_repository.UserRepository()
+            user_repo = user_repository1.UserRepository()
             result = user_repo.get_all_users()
 
             if result['status']:
@@ -20,7 +20,7 @@ class User(object):
 
     def on_get_item(self, req, resp, id):
         try:
-            user_repo = user_repository.UserRepository()
+            user_repo = user_repository1.UserRepository()
             result = user_repo.get_user_by_id(id)
 
             if result['status']:

@@ -1,7 +1,7 @@
-#from managers import data_manager
-#model
+from managers import data_manager
 
-class UserRepository():
+
+class UserRepository(data_manager.DataManager):
     def __init__(self):
         super().__init__()
 

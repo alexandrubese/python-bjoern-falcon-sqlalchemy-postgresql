@@ -1,5 +1,6 @@
 import falcon
 from routes import init_routes
+from services import db_engine
 
 ''' For Debugging purposes '''
 
@@ -22,4 +23,5 @@ pydevd_pycharm.settrace('host.docker.internal',
 # ])
 
 api = falcon.API()
-init_routes.init_app_routes(api)
+db_connection = db_engine.connect()
+init_routes.init_app_routes(api, db_connection)
