@@ -1,14 +1,20 @@
-#from managers import data_manager
-#model
+from sqlalchemy.orm.session import Session
+from entities.user import User
 
-class UserRepository():
-    def __init__(self):
-        super().__init__()
+
+class UserRepository(object):
+    def __init__(self, session: Session):
+        self.session = session
 
     def get_all_users(self):
-        query = f"SELECT * FROM users"
-        return self.get_data(query)
+        return self.session.query(User).all()
 
     def get_user_by_id(self, id):
-        query = f"SELECT * FROM users where id={id}"
-        return self.get_data(query)
+        item = self.session.query(User).get(id)
+        return item if item else {}
+
+    def add_user(self, user):
+        user = User(name=user["name"], fullname=user["fullname"])
+        added_user = self.session.add(user)
+        self.session.commit()
+        return added_user
