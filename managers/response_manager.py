@@ -1,16 +1,8 @@
 import falcon
 import rapidjson
 
-'''
-def parse_body(body):
-    if not body:
-        return rapidjson.dumps(body)
-    else:
-        return rapidjson.dumps(parse_list(body) if isinstance(body, list) else to_dict(body))
-'''
 
-
-class Manager(object):
+class ResponseManager(object):
     def __init__(self, resp: falcon.response, body) -> falcon.response:
         self.resp = resp
         self.resp.body = rapidjson.dumps(body)
