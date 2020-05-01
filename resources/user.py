@@ -21,6 +21,15 @@ class User(object):
             error = {"status": False, "message": str(error), "data": None}
             ResponseManager(resp, error).not_ok()
 
+    def on_get_item(self, req, resp, id):
+        try:
+            result = self.repository.get_user_by_id(id)
+            ResponseManager(resp, result).ok()
+
+        except Exception as error:
+            error = {"status": False, "messages": str(error), "data": None}
+            ResponseManager(resp, error).not_ok()
+
     @use_args(user_schema)
     def on_post_collection(self, req, resp, args):
         try:
@@ -33,13 +42,23 @@ class User(object):
             err = {"status": False, "message": str(error), "data": None}
             ResponseManager(resp, err).not_ok()
 
-    def on_get_item(self, req, resp, id):
+    @use_args(user_schema)
+    def on_put_item(self, req, resp, args, id ):
         try:
-            result = self.repository.get_user_by_id(id)
+            result = self.repository.put_user(id, args)
             ResponseManager(resp, result).ok()
 
         except Exception as error:
-            error = {"status": False, "messagess": str(error), "data": None}
+            error = {"status": False, "messages": str(error), "data": None}
+            ResponseManager(resp, error).not_ok()
+
+    def on_delete_item(self, req, resp, id):
+        try:
+            result = self.repository.remove_user(id)
+            ResponseManager(resp, result).ok()
+
+        except Exception as error:
+            error = {"status": False, "messages": str(error), "data": None}
             ResponseManager(resp, error).not_ok()
 
     def on_get_mock_user(self, req, resp):
