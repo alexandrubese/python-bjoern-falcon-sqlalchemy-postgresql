@@ -2,6 +2,8 @@ import rapidjson as json
 import falcon
 from managers.response_manager import ResponseManager
 from repositories.user_repository import UserRepository
+from services.schema_validation import SchemaValidation
+from entities import User as UserEntity
 
 
 class User(object):
@@ -19,13 +21,16 @@ class User(object):
 
     def on_post_collection(self, req, resp):
         try:
+            SchemaValidation(UserEntity.schema(), req).validate()
             body = req.media
             result = self.repository.add_user(body)
             ResponseManager(resp, result).ok()
 
+        except falcon.HTTPError as error:
+            ResponseManager(resp, error.to_dict()).not_ok()
         except Exception as error:
-            error = {"status": False, "message": str(error), "data": None}
-            ResponseManager(resp, error).not_ok()
+            err = {"status": False, "message": str(error), "data": None}
+            ResponseManager(resp, err).not_ok()
 
     def on_get_item(self, req, resp, id):
         try:

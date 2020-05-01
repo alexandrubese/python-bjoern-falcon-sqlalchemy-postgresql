@@ -1,4 +1,4 @@
-from resources.user import User
+from controllers.user import User
 
 
 def set_user_routes(api, db_session):
