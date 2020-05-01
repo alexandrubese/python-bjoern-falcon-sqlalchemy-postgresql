@@ -24,8 +24,7 @@ class User(object):
     @use_args(user_schema)
     def on_post_collection(self, req, resp, args):
         try:
-            body = args
-            result = self.repository.add_user(body)
+            result = self.repository.add_user(args)
             ResponseManager(resp, result).ok()
 
         except falcon.HTTPError as error:
