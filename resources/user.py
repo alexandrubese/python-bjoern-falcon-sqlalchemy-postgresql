@@ -52,6 +52,15 @@ class User(object):
             error = {"status": False, "messages": str(error), "data": None}
             ResponseManager(resp, error).not_ok()
 
+    def on_patch_item(self, req, resp, id):
+        try:
+            result = self.repository.patch_user(id, req.media)
+            ResponseManager(resp, result).ok()
+
+        except Exception as error:
+            error = {"status": False, "messages": str(error), "data": None}
+            ResponseManager(resp, error).not_ok()
+
     def on_delete_item(self, req, resp, id):
         try:
             result = self.repository.remove_user(id)

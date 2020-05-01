@@ -32,6 +32,15 @@ class UserRepository(Serializer):
         self.session.commit()
         return self.parse_dict(user) if user else {}
 
+    def patch_user(self, id, body):
+        user = self.session.query(User).get(id)
+        (key, value), = body.items()
+        setattr(user, key, value)
+
+        self.session.add(user)
+        self.session.commit()
+        return self.parse_dict(user) if user else {}
+
     def remove_user(self, id):
         user = self.session.query(User).filter_by(id=id)
         user.delete()
